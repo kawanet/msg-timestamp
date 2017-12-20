@@ -1,0 +1,39 @@
+{
+  "name": "msg-timestamp",
+  "description": "msgpack timestamp: ext type -1",
+  "version": "0.1.0",
+  "author": "@kawanet",
+  "bugs": {
+    "url": "https://github.com/kawanet/msg-timestamp/issues"
+  },
+  "dependencies": {
+    "int64-buffer": "github:kawanet/int64-buffer",
+    "msg-interface": "github:kawanet/msg-interface",
+    "timestamp-nano": "github:kawanet/timestamp-nano"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.55",
+    "mocha": "^4.0.1",
+    "typescript": "^2.6.2"
+  },
+  "homepage": "https://github.com/kawanet/msg-timestamp#readme",
+  "keywords": [
+    "messagepack",
+    "msgpack",
+    "timestamp",
+    "typescript"
+  ],
+  "license": "MIT",
+  "main": "lib/msg-timestamp.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawanet/msg-timestamp.git"
+  },
+  "scripts": {
+    "mocha": "./node_modules/.bin/mocha test",
+    "test": "npm run mocha",
+    "tsc": "./node_modules/.bin/tsc"
+  },
+  "typings": "lib/msg-timestamp.ts"
+}
