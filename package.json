@@ -1,7 +1,7 @@
 {
   "name": "msg-timestamp",
   "description": "msgpack timestamp: ext type -1",
-  "version": "0.1.0",
+  "version": "0.99.714",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/msg-timestamp/issues"
