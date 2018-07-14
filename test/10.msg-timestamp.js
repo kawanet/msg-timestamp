@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
-var _1 = require("../");
+var __1 = require("../");
 var TITLE = __filename.split("/").pop();
 describe(TITLE, function () {
     it("MsgTimestamp32", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 0;
-        var msg = _1.MsgTimestamp.from(time);
-        assert(msg instanceof _1.MsgTimestamp32);
+        var msg = __1.MsgTimestamp.from(time);
+        assert(msg instanceof __1.MsgTimestamp32);
         check(msg);
         // round trip
-        check(new _1.MsgTimestamp(msg.buffer));
+        check(new __1.MsgTimestamp(msg.buffer));
         function check(msg) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 4);
@@ -27,11 +27,11 @@ describe(TITLE, function () {
     it("MsgTimestamp64", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 6000000;
-        var msg = _1.MsgTimestamp.from(time, nano);
-        assert(msg instanceof _1.MsgTimestamp64);
+        var msg = __1.MsgTimestamp.from(time, nano);
+        assert(msg instanceof __1.MsgTimestamp64);
         check(msg);
         // round trip
-        check(new _1.MsgTimestamp(msg.buffer));
+        check(new __1.MsgTimestamp(msg.buffer));
         function check(msg) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 8);
@@ -47,11 +47,11 @@ describe(TITLE, function () {
     it("MsgTimestamp96", function () {
         var time = -1;
         var nano = 999999999;
-        var msg = _1.MsgTimestamp.from(time, nano);
-        assert(msg instanceof _1.MsgTimestamp96);
+        var msg = __1.MsgTimestamp.from(time, nano);
+        assert(msg instanceof __1.MsgTimestamp96);
         check(msg);
         // round trip
-        check(new _1.MsgTimestamp(msg.buffer));
+        check(new __1.MsgTimestamp(msg.buffer));
         function check(msg) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 12);
