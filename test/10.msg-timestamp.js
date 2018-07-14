@@ -18,6 +18,7 @@ describe(TITLE, function () {
             assert.equal(msg.msgpackLength, 6);
             assert.equal(msg.getTime(), time);
             assert.equal(msg.getNano(), nano);
+            assert.equal(atos(msg.toMsgpack()), "d6-ff-5a-4a-f6-a5");
             // Timestamp
             assert.equal(msg.toJSON(), "2018-01-02T03:04:05.000Z");
             // valueOf
@@ -38,6 +39,7 @@ describe(TITLE, function () {
             assert.equal(msg.msgpackLength, 10);
             assert.equal(msg.getTime(), time);
             assert.equal(msg.getNano(), nano);
+            assert.equal(atos(msg.toMsgpack()), "d7-ff-01-6e-36-00-5a-4a-f6-a5");
             // Timestamp
             assert.equal(msg.toJSON(), "2018-01-02T03:04:05.006Z");
             // valueOf
@@ -58,6 +60,7 @@ describe(TITLE, function () {
             assert.equal(msg.msgpackLength, 15);
             assert.equal(msg.getTime(), time);
             assert.equal(msg.getNano(), nano);
+            assert.equal(atos(msg.toMsgpack()), "c7-0c-ff-3b-9a-c9-ff-ff-ff-ff-ff-ff-ff-ff-ff");
             // Timestamp
             assert.equal(msg.toJSON(), "1969-12-31T23:59:59.999999999Z");
             // valueOf
@@ -65,3 +68,6 @@ describe(TITLE, function () {
         }
     });
 });
+function atos(array) {
+    return [].map.call(array, function (v) { return ((v < 16 ? "0" : "") + v.toString(16)); }).join("-");
+}
