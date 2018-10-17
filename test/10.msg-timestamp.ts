@@ -3,7 +3,9 @@
 import * as assert from "assert";
 import {MsgTimestamp, MsgTimestamp32, MsgTimestamp64, MsgTimestamp96} from "../";
 
-const TITLE = __filename.split("/").pop();
+const TITLE = __filename.split("/").pop() as string;
+
+const atos = (array: any) => [].map.call(array, (v: number) => (v > 15 ? "" : "0") + v.toString(16)).join("-");
 
 describe(TITLE, function () {
 
@@ -17,7 +19,7 @@ describe(TITLE, function () {
         // round trip
         check(new MsgTimestamp(msg.buffer));
 
-        function check(msg) {
+        function check(msg: MsgTimestamp) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 4);
             assert.equal(msg.msgpackLength, 6);
@@ -44,7 +46,7 @@ describe(TITLE, function () {
         // round trip
         check(new MsgTimestamp(msg.buffer));
 
-        function check(msg) {
+        function check(msg: MsgTimestamp) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 8);
             assert.equal(msg.msgpackLength, 10);
@@ -71,7 +73,7 @@ describe(TITLE, function () {
         // round trip
         check(new MsgTimestamp(msg.buffer));
 
-        function check(msg) {
+        function check(msg: MsgTimestamp) {
             assert.equal(msg.type, -1);
             assert.equal(msg.buffer.length, 12);
             assert.equal(msg.msgpackLength, 15);
@@ -88,7 +90,3 @@ describe(TITLE, function () {
         }
     });
 });
-
-function atos(array) {
-    return [].map.call(array, v => ((v < 16 ? "0" : "") + v.toString(16))).join("-");
-}

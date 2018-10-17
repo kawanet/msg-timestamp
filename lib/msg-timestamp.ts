@@ -13,8 +13,8 @@ const BIT32 = 0x100000000;
 
 export class MsgTimestamp extends MsgExt {
 
-    static from(timeT: number | Int64BE, nano?: number) {
-        nano |= 0;
+    static from(timeT: number | Int64BE, nano?: number): MsgTimestamp {
+        nano = 0 | nano as number;
         const time = +timeT;
         if (0 <= time && time < BIT32 && !nano) {
             return MsgTimestamp32.from(time);
@@ -25,14 +25,14 @@ export class MsgTimestamp extends MsgExt {
         }
     }
 
-    getTime(): number {
+    getTime(): number | undefined {
         const proto = getPrototype(this);
         if (!proto) return;
         if (this.getTime === proto.getTime) return;
         return proto.getTime.call(this);
     }
 
-    getNano(): number {
+    getNano(): number | undefined {
         const proto = getPrototype(this);
         if (!proto) return;
         if (this.getNano === proto.getNano) return;
@@ -47,9 +47,9 @@ export class MsgTimestamp extends MsgExt {
         return toTimestamp(this).toString(fmt);
     }
 
-    toDate() {
-        const time = this.getTime();
-        const nano = this.getNano();
+    toDate(): Date {
+        const time = this.getTime() as number;
+        const nano = this.getNano() as number;
         return new Date(time * 1000 + Math.floor(nano / 1000000));
     }
 }
@@ -93,7 +93,7 @@ export class MsgTimestamp64 extends MsgTimestamp {
 
     static from(time: number, nano?: number) {
         time = +time;
-        nano |= 0;
+        nano = 0 | nano as number;
 
         const payload = Buffer.alloc(8);
 
@@ -132,9 +132,10 @@ export class MsgTimestamp96 extends MsgTimestamp {
 
     static from(time: number | Int64BE, nano?: number) {
         const payload = Buffer.alloc(12);
+        nano = 0 | nano as number;
 
         // nanoseconds in 32-bit unsigned int
-        payload.writeUInt32BE(nano | 0, 0);
+        payload.writeUInt32BE(nano, 0);
 
         // seconds in 64-bit signed int
         if (Int64BE.isInt64BE(time)) {
@@ -166,7 +167,7 @@ export class MsgTimestamp96 extends MsgTimestamp {
 
 // msgpackLength to class
 
-const sizeMap = [];
+const sizeMap = [] as { [size: number]: Function };
 sizeMap[6] = MsgTimestamp32;
 sizeMap[10] = MsgTimestamp64;
 sizeMap[15] = MsgTimestamp96;
@@ -175,7 +176,7 @@ sizeMap[15] = MsgTimestamp96;
  * @private
  */
 
-function getPrototype(msg) {
+function getPrototype(msg: MsgTimestamp) {
     const length = msg.msgpackLength;
     const c = sizeMap[length];
     if (!c) return;
@@ -186,8 +187,8 @@ function getPrototype(msg) {
  * @private
  */
 
-function toTimestamp(msg) {
-    const time = msg.getTime();
-    const nano = msg.getNano();
+function toTimestamp(msg: MsgTimestamp) {
+    const time = msg.getTime() as number;
+    const nano = msg.getNano() as number;
     return Timestamp.fromTimeT(time).addNano(nano);
 }
