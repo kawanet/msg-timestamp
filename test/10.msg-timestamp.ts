@@ -2,6 +2,7 @@
 
 import * as assert from "assert";
 import {MsgTimestamp, MsgTimestamp32, MsgTimestamp64, MsgTimestamp96} from "../";
+import {msgToBuffer} from "msg-interface";
 
 const TITLE = __filename.split("/").pop() as string;
 
@@ -26,7 +27,7 @@ describe(TITLE, function () {
             assert.strictEqual(msg.getTime(), time);
             assert.strictEqual(msg.getNano(), nano);
 
-            assert.strictEqual(atos(msg.toMsgpack()), "d6-ff-5a-4a-f6-a5");
+            assert.strictEqual(atos(msgToBuffer(msg)), "d6-ff-5a-4a-f6-a5");
 
             // Timestamp
             assert.strictEqual(msg.toJSON(), "2018-01-02T03:04:05.000Z");
@@ -53,7 +54,7 @@ describe(TITLE, function () {
             assert.strictEqual(msg.getTime(), time);
             assert.strictEqual(msg.getNano(), nano);
 
-            assert.strictEqual(atos(msg.toMsgpack()), "d7-ff-01-6e-36-00-5a-4a-f6-a5");
+            assert.strictEqual(atos(msgToBuffer(msg)), "d7-ff-01-6e-36-00-5a-4a-f6-a5");
 
             // Timestamp
             assert.strictEqual(msg.toJSON(), "2018-01-02T03:04:05.006Z");
@@ -80,7 +81,7 @@ describe(TITLE, function () {
             assert.strictEqual(msg.getTime(), time);
             assert.strictEqual(msg.getNano(), nano);
 
-            assert.strictEqual(atos(msg.toMsgpack()), "c7-0c-ff-3b-9a-c9-ff-ff-ff-ff-ff-ff-ff-ff-ff");
+            assert.strictEqual(atos(msgToBuffer(msg)), "c7-0c-ff-3b-9a-c9-ff-ff-ff-ff-ff-ff-ff-ff-ff");
 
             // Timestamp
             assert.strictEqual(msg.toJSON(), "1969-12-31T23:59:59.999999999Z");
