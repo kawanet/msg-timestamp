@@ -9,10 +9,10 @@ describe(TITLE, function () {
     it("MsgTimestamp32", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 0;
-        var msg = __1.createMsgTimestamp(time);
+        var msg = __1.MsgTimestamp.from(time);
         check(msg);
         // round trip
-        check(__1.unpackMsgTimestamp(msg.buffer));
+        check(__1.MsgTimestamp.parse(msg.buffer));
         function check(msg) {
             assert(msg instanceof __1.MsgTimestamp32);
             assert.strictEqual(msg.type, -1);
@@ -30,10 +30,10 @@ describe(TITLE, function () {
     it("MsgTimestamp64", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 6000000;
-        var msg = __1.createMsgTimestamp(time, nano);
+        var msg = __1.MsgTimestamp.from(time, nano);
         check(msg);
         // round trip
-        check(__1.unpackMsgTimestamp(msg.buffer));
+        check(__1.MsgTimestamp.parse(msg.buffer));
         function check(msg) {
             assert(msg instanceof __1.MsgTimestamp64);
             assert.strictEqual(msg.type, -1);
@@ -51,10 +51,10 @@ describe(TITLE, function () {
     it("MsgTimestamp96", function () {
         var time = -1;
         var nano = 999999999;
-        var msg = __1.createMsgTimestamp(time, nano);
+        var msg = __1.MsgTimestamp.from(time, nano);
         check(msg);
         // round trip
-        check(__1.unpackMsgTimestamp(msg.buffer));
+        check(__1.MsgTimestamp.parse(msg.buffer));
         function check(msg) {
             assert(msg instanceof __1.MsgTimestamp96);
             assert.strictEqual(msg.type, -1);
