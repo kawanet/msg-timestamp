@@ -1,6 +1,6 @@
 "use strict";
 
-import {MsgExt} from "msg-interface";
+import {MsgExt} from "msg-ext";
 import {Int64BE} from "int64-buffer";
 import Timestamp = require("timestamp-nano");
 

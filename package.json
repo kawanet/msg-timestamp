@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "int64-buffer": "github:kawanet/int64-buffer",
+    "msg-ext": "github:kawanet/msg-ext",
     "msg-interface": "github:kawanet/msg-interface",
     "timestamp-nano": "github:kawanet/timestamp-nano"
   },
