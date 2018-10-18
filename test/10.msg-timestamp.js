@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var assert = require("assert");
-var __1 = require("../");
 var msg_interface_1 = require("msg-interface");
+var __1 = require("../");
 var TITLE = __filename.split("/").pop();
 var atos = function (array) { return [].map.call(array, function (v) { return (v > 15 ? "" : "0") + v.toString(16); }).join("-"); };
 describe(TITLE, function () {
     it("MsgTimestamp32", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 0;
-        var msg = __1.MsgTimestamp.from(time);
-        assert(msg instanceof __1.MsgTimestamp32);
+        var msg = __1.createMsgTimestamp(time);
         check(msg);
         // round trip
-        check(new __1.MsgTimestamp(msg.buffer));
+        check(__1.unpackMsgTimestamp(msg.buffer));
         function check(msg) {
+            assert(msg instanceof __1.MsgTimestamp32);
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 4);
             assert.strictEqual(msg.msgpackLength, 6);
@@ -30,12 +30,12 @@ describe(TITLE, function () {
     it("MsgTimestamp64", function () {
         var time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         var nano = 6000000;
-        var msg = __1.MsgTimestamp.from(time, nano);
-        assert(msg instanceof __1.MsgTimestamp64);
+        var msg = __1.createMsgTimestamp(time, nano);
         check(msg);
         // round trip
-        check(new __1.MsgTimestamp(msg.buffer));
+        check(__1.unpackMsgTimestamp(msg.buffer));
         function check(msg) {
+            assert(msg instanceof __1.MsgTimestamp64);
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 8);
             assert.strictEqual(msg.msgpackLength, 10);
@@ -51,12 +51,12 @@ describe(TITLE, function () {
     it("MsgTimestamp96", function () {
         var time = -1;
         var nano = 999999999;
-        var msg = __1.MsgTimestamp.from(time, nano);
-        assert(msg instanceof __1.MsgTimestamp96);
+        var msg = __1.createMsgTimestamp(time, nano);
         check(msg);
         // round trip
-        check(new __1.MsgTimestamp(msg.buffer));
+        check(__1.unpackMsgTimestamp(msg.buffer));
         function check(msg) {
+            assert(msg instanceof __1.MsgTimestamp96);
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 12);
             assert.strictEqual(msg.msgpackLength, 15);
