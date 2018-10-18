@@ -5,7 +5,6 @@ import * as assert from "assert";
 import {msgToBuffer} from "msg-interface";
 
 import {
-    createMsgTimestamp,
     MsgTimestamp,
     MsgTimestamp32,
     MsgTimestamp64,
@@ -22,7 +21,7 @@ describe(TITLE, function () {
     it("MsgTimestamp32", () => {
         const time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         const nano = 0;
-        const msg = createMsgTimestamp(time);
+        const msg = MsgTimestamp.from(time);
         check(msg);
 
         // round trip
@@ -50,7 +49,7 @@ describe(TITLE, function () {
     it("MsgTimestamp64", () => {
         const time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         const nano = 6000000;
-        const msg = createMsgTimestamp(time, nano);
+        const msg = MsgTimestamp.from(time, nano);
         check(msg);
 
         // round trip
@@ -78,7 +77,7 @@ describe(TITLE, function () {
     it("MsgTimestamp96", () => {
         const time = -1;
         const nano = 999999999;
-        const msg = createMsgTimestamp(time, nano);
+        const msg = MsgTimestamp.from(time, nano);
         check(msg);
 
         // round trip

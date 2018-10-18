@@ -8,19 +8,6 @@ const BIT34 = 0x400000000;
 const BIT32 = 0x100000000;
 const EXTTYPE = -1;
 
-export function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestamp {
-    nano = 0 | nano as number;
-
-    const time = +timeT;
-    if (0 <= time && time < BIT32 && !nano) {
-        return MsgTimestamp32.from(time);
-    } else if (0 <= time && time < BIT34) {
-        return MsgTimestamp64.from(time, nano);
-    } else {
-        return MsgTimestamp96.from(timeT, nano);
-    }
-}
-
 export function unpackMsgTimestamp(buffer: Buffer): MsgTimestamp {
     const length = buffer.length;
 
@@ -57,6 +44,19 @@ export abstract class MsgTimestamp extends MsgExt {
 
     toDate(): Date {
         return this.toTimestamp().toDate();
+    }
+
+    static from(timeT: number | Int64BE, nano?: number): MsgTimestamp {
+        nano = 0 | nano as number;
+
+        const time = +timeT;
+        if (0 <= time && time < BIT32 && !nano) {
+            return MsgTimestamp32.from(time);
+        } else if (0 <= time && time < BIT34) {
+            return MsgTimestamp64.from(time, nano);
+        } else {
+            return MsgTimestamp96.from(timeT, nano);
+        }
     }
 }
 
