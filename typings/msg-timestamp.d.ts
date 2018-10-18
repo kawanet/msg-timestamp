@@ -2,19 +2,12 @@
 import { MsgExt } from "msg-ext";
 import { Int64BE } from "int64-buffer";
 import Timestamp = require("timestamp-nano");
-export interface MsgTimestampInterface extends MsgExt {
-    getTime(): number;
-    getNano(): number;
-    toString(fmt?: string): string;
-    toDate(): Date;
-    toTimestamp(): Timestamp;
-}
-export declare function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestampInterface;
-export declare function unpackMsgTimestamp(buffer: Buffer): MsgTimestampInterface;
+export declare function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestamp;
+export declare function unpackMsgTimestamp(buffer: Buffer): MsgTimestamp;
 /**
  * Timestamp extension type is assigned to extension type -1.
  */
-declare abstract class MsgTimestamp extends MsgExt implements MsgTimestampInterface {
+export declare abstract class MsgTimestamp extends MsgExt implements MsgTimestamp {
     abstract getTime(): number;
     abstract getNano(): number;
     abstract toTimestamp(): Timestamp;
@@ -49,4 +42,3 @@ export declare class MsgTimestamp96 extends MsgTimestamp {
     getNano(): number;
     toTimestamp(): Timestamp;
 }
-export {};

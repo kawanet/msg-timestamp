@@ -8,19 +8,7 @@ const BIT34 = 0x400000000;
 const BIT32 = 0x100000000;
 const EXTTYPE = -1;
 
-export interface MsgTimestampInterface extends MsgExt {
-    getTime(): number;
-
-    getNano(): number;
-
-    toString(fmt?: string): string;
-
-    toDate(): Date;
-
-    toTimestamp(): Timestamp;
-}
-
-export function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestampInterface {
+export function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestamp {
     nano = 0 | nano as number;
 
     const time = +timeT;
@@ -33,7 +21,7 @@ export function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgT
     }
 }
 
-export function unpackMsgTimestamp(buffer: Buffer): MsgTimestampInterface {
+export function unpackMsgTimestamp(buffer: Buffer): MsgTimestamp {
     const length = buffer.length;
 
     switch (length) {
@@ -52,22 +40,22 @@ export function unpackMsgTimestamp(buffer: Buffer): MsgTimestampInterface {
  * Timestamp extension type is assigned to extension type -1.
  */
 
-abstract class MsgTimestamp extends MsgExt implements MsgTimestampInterface {
+export abstract class MsgTimestamp extends MsgExt {
     abstract getTime(): number;
 
     abstract getNano(): number;
 
     abstract toTimestamp(): Timestamp;
 
-    toJSON() {
+    toJSON(): string {
         return this.toTimestamp().toJSON();
     }
 
-    toString(fmt?: string) {
+    toString(fmt?: string): string {
         return this.toTimestamp().toString(fmt);
     }
 
-    toDate() {
+    toDate(): Date {
         return this.toTimestamp().toDate();
     }
 }
