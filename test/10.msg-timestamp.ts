@@ -4,13 +4,7 @@ import * as assert from "assert";
 
 import {msgToBuffer} from "msg-interface";
 
-import {
-    MsgTimestamp,
-    MsgTimestamp32,
-    MsgTimestamp64,
-    MsgTimestamp96,
-    unpackMsgTimestamp
-} from "../";
+import {MsgTimestamp, MsgTimestamp32, MsgTimestamp64, MsgTimestamp96} from "../";
 
 const TITLE = __filename.split("/").pop() as string;
 
@@ -25,7 +19,7 @@ describe(TITLE, function () {
         check(msg);
 
         // round trip
-        check(unpackMsgTimestamp(msg.buffer));
+        check(MsgTimestamp.parse(msg.buffer));
 
         function check(msg: MsgTimestamp) {
             assert(msg instanceof MsgTimestamp32);
@@ -53,7 +47,7 @@ describe(TITLE, function () {
         check(msg);
 
         // round trip
-        check(unpackMsgTimestamp(msg.buffer));
+        check(MsgTimestamp.parse(msg.buffer));
 
         function check(msg: MsgTimestamp) {
             assert(msg instanceof MsgTimestamp64);
@@ -81,7 +75,7 @@ describe(TITLE, function () {
         check(msg);
 
         // round trip
-        check(unpackMsgTimestamp(msg.buffer));
+        check(MsgTimestamp.parse(msg.buffer));
 
         function check(msg: MsgTimestamp) {
             assert(msg instanceof MsgTimestamp96);

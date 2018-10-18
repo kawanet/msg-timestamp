@@ -8,21 +8,6 @@ const BIT34 = 0x400000000;
 const BIT32 = 0x100000000;
 const EXTTYPE = -1;
 
-export function unpackMsgTimestamp(buffer: Buffer): MsgTimestamp {
-    const length = buffer.length;
-
-    switch (length) {
-        case 4:
-            return new MsgTimestamp32(buffer);
-        case 8:
-            return new MsgTimestamp64(buffer);
-        case 12:
-            return new MsgTimestamp96(buffer);
-        default:
-            throw new TypeError("Invalid payload length: " + length);
-    }
-}
-
 /**
  * Timestamp extension type is assigned to extension type -1.
  */
@@ -56,6 +41,21 @@ export abstract class MsgTimestamp extends MsgExt {
             return MsgTimestamp64.from(time, nano);
         } else {
             return MsgTimestamp96.from(timeT, nano);
+        }
+    }
+
+    static parse(buffer: Buffer): MsgTimestamp {
+        const length = buffer.length;
+
+        switch (length) {
+            case 4:
+                return new MsgTimestamp32(buffer);
+            case 8:
+                return new MsgTimestamp64(buffer);
+            case 12:
+                return new MsgTimestamp96(buffer);
+            default:
+                throw new TypeError("Invalid payload length: " + length);
         }
     }
 }

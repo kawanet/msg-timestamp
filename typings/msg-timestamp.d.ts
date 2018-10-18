@@ -2,7 +2,6 @@
 import { MsgExt } from "msg-ext";
 import { Int64BE } from "int64-buffer";
 import Timestamp = require("timestamp-nano");
-export declare function unpackMsgTimestamp(buffer: Buffer): MsgTimestamp;
 /**
  * Timestamp extension type is assigned to extension type -1.
  */
@@ -14,6 +13,7 @@ export declare abstract class MsgTimestamp extends MsgExt {
     toString(fmt?: string): string;
     toDate(): Date;
     static from(timeT: number | Int64BE, nano?: number): MsgTimestamp;
+    static parse(buffer: Buffer): MsgTimestamp;
 }
 /**
  * Timestamp 32 format can represent a timestamp in [1970-01-01 00:00:00 UTC, 2106-02-07 06:28:16 UTC) range. Nanoseconds part is 0.
