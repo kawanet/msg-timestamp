@@ -1,8 +1,8 @@
 # msg-timestamp - msgpack timestamp: ext type -1
 
-[![Build Status](https://travis-ci.org/kawanet/msg-timestamp.svg?branch=master)](https://travis-ci.org/kawanet/msg-timestamp)
+[![npm version](https://badge.fury.io/js/msg-timestamp.svg)](http://badge.fury.io/js/msg-timestamp) [![Build Status](https://travis-ci.org/kawanet/msg-timestamp.svg?branch=master)](https://travis-ci.org/kawanet/msg-timestamp)
 
-### `MsgTimestamp32`
+### MsgTimestamp32
 
 ```js
 var MsgTimestamp32 = require("msg-timestamp").MsgTimestamp32;
@@ -21,7 +21,7 @@ var msgToBuffer = require("msg-interface").msgToBuffer;
 msgToBuffer(msg); // => <Buffer d6 ff 00 00 00 00>
 ```
 
-### `MsgTimestamp64`
+### MsgTimestamp64
 
 ```js
 var MsgTimestamp64 = require("msg-timestamp").MsgTimestamp64;
@@ -42,7 +42,7 @@ var msgToBuffer = require("msg-interface").msgToBuffer;
 msgToBuffer(msg); // => <Buffer d7 ff 1d 6f 34 54 5b c8 ce e5>
 ```
 
-### `MsgTimestamp96`
+### MsgTimestamp96
 
 ```js
 var MsgTimestamp96 = require("msg-timestamp").MsgTimestamp96;
