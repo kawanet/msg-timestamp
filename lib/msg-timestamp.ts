@@ -6,59 +6,75 @@ import Timestamp = require("timestamp-nano");
 
 const BIT34 = 0x400000000;
 const BIT32 = 0x100000000;
+const EXTTYPE = -1;
+
+export interface MsgTimestampInterface extends MsgExt {
+    getTime(): number;
+
+    getNano(): number;
+
+    toString(fmt?: string): string;
+
+    toDate(): Date;
+
+    toTimestamp(): Timestamp;
+}
+
+export function createMsgTimestamp(timeT: number | Int64BE, nano?: number): MsgTimestampInterface {
+    nano = 0 | nano as number;
+
+    const time = +timeT;
+    if (0 <= time && time < BIT32 && !nano) {
+        return MsgTimestamp32.from(time);
+    } else if (0 <= time && time < BIT34) {
+        return MsgTimestamp64.from(time, nano);
+    } else {
+        return MsgTimestamp96.from(timeT, nano);
+    }
+}
+
+export function unpackMsgTimestamp(buffer: Buffer): MsgTimestampInterface {
+    const length = buffer.length;
+
+    switch (length) {
+        case 4:
+            return new MsgTimestamp32(buffer);
+        case 8:
+            return new MsgTimestamp64(buffer);
+        case 12:
+            return new MsgTimestamp96(buffer);
+        default:
+            throw new TypeError("Invalid payload length: " + length);
+    }
+}
 
 /**
  * Timestamp extension type is assigned to extension type -1.
  */
 
-export class MsgTimestamp extends MsgExt {
+abstract class MsgTimestamp extends MsgExt implements MsgTimestampInterface {
+    abstract getTime(): number;
 
-    static from(timeT: number | Int64BE, nano?: number): MsgTimestamp {
-        nano = 0 | nano as number;
-        const time = +timeT;
-        if (0 <= time && time < BIT32 && !nano) {
-            return MsgTimestamp32.from(time);
-        } else if (0 <= time && time < BIT34) {
-            return MsgTimestamp64.from(time, nano);
-        } else {
-            return MsgTimestamp96.from(timeT, nano);
-        }
-    }
+    abstract getNano(): number;
 
-    getTime(): number | undefined {
-        const proto = getPrototype(this);
-        if (!proto) return;
-        if (this.getTime === proto.getTime) return;
-        return proto.getTime.call(this);
-    }
-
-    getNano(): number | undefined {
-        const proto = getPrototype(this);
-        if (!proto) return;
-        if (this.getNano === proto.getNano) return;
-        return proto.getNano.call(this);
-    }
+    abstract toTimestamp(): Timestamp;
 
     toJSON() {
-        return toTimestamp(this).toJSON();
+        return this.toTimestamp().toJSON();
     }
 
     toString(fmt?: string) {
-        return toTimestamp(this).toString(fmt);
+        return this.toTimestamp().toString(fmt);
     }
 
-    toDate(): Date {
-        const time = this.getTime() as number;
-        const nano = this.getNano() as number;
-        return new Date(time * 1000 + Math.floor(nano / 1000000));
+    toDate() {
+        return this.toTimestamp().toDate();
     }
 }
 
 // ext type -1
 
-((P) => {
-    P.type = -1;
-})(MsgTimestamp.prototype);
+MsgTimestamp.prototype.type = EXTTYPE;
 
 /**
  * Timestamp 32 format can represent a timestamp in [1970-01-01 00:00:00 UTC, 2106-02-07 06:28:16 UTC) range. Nanoseconds part is 0.
@@ -82,6 +98,11 @@ export class MsgTimestamp32 extends MsgTimestamp {
 
     getNano() {
         return 0;
+    }
+
+    toTimestamp() {
+        const time = this.getTime();
+        return Timestamp.fromTimeT(time);
     }
 }
 
@@ -121,6 +142,12 @@ export class MsgTimestamp64 extends MsgTimestamp {
 
         // nanoseconds in 30-bit unsigned int
         return Math.floor(high / 4);
+    }
+
+    toTimestamp() {
+        const time = this.getTime();
+        const nano = this.getNano();
+        return Timestamp.fromTimeT(time).addNano(nano);
     }
 }
 
@@ -163,32 +190,4 @@ export class MsgTimestamp96 extends MsgTimestamp {
         // seconds in 64-bit signed int
         return Timestamp.fromInt64BE(this.buffer, 4).addNano(nano);
     }
-}
-
-// msgpackLength to class
-
-const sizeMap = [] as { [size: number]: Function };
-sizeMap[6] = MsgTimestamp32;
-sizeMap[10] = MsgTimestamp64;
-sizeMap[15] = MsgTimestamp96;
-
-/**
- * @private
- */
-
-function getPrototype(msg: MsgTimestamp) {
-    const length = msg.msgpackLength;
-    const c = sizeMap[length];
-    if (!c) return;
-    return c.prototype;
-}
-
-/**
- * @private
- */
-
-function toTimestamp(msg: MsgTimestamp) {
-    const time = msg.getTime() as number;
-    const nano = msg.getNano() as number;
-    return Timestamp.fromTimeT(time).addNano(nano);
 }

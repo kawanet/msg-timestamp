@@ -1,8 +1,9 @@
 "use strict";
 
 import * as assert from "assert";
-import {MsgTimestamp, MsgTimestamp32, MsgTimestamp64, MsgTimestamp96} from "../";
+import {createMsgTimestamp, MsgTimestamp32, MsgTimestamp64, MsgTimestamp96} from "../";
 import {msgToBuffer} from "msg-interface";
+import {unpackMsgTimestamp} from "../lib/msg-timestamp";
 
 const TITLE = __filename.split("/").pop() as string;
 
@@ -13,14 +14,15 @@ describe(TITLE, function () {
     it("MsgTimestamp32", () => {
         const time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         const nano = 0;
-        const msg = MsgTimestamp.from(time);
-        assert(msg instanceof MsgTimestamp32);
+        const msg = createMsgTimestamp(time) as MsgTimestamp32;
         check(msg);
 
         // round trip
-        check(new MsgTimestamp(msg.buffer));
+        check(unpackMsgTimestamp(msg.buffer) as MsgTimestamp32);
 
-        function check(msg: MsgTimestamp) {
+        function check(msg: MsgTimestamp32) {
+            assert(msg instanceof MsgTimestamp32);
+
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 4);
             assert.strictEqual(msg.msgpackLength, 6);
@@ -40,14 +42,15 @@ describe(TITLE, function () {
     it("MsgTimestamp64", () => {
         const time = Date.UTC(2018, 0, 2, 3, 4, 5) / 1000;
         const nano = 6000000;
-        const msg = MsgTimestamp.from(time, nano);
-        assert(msg instanceof MsgTimestamp64);
+        const msg = createMsgTimestamp(time, nano) as MsgTimestamp64;
         check(msg);
 
         // round trip
-        check(new MsgTimestamp(msg.buffer));
+        check(unpackMsgTimestamp(msg.buffer) as MsgTimestamp64);
 
-        function check(msg: MsgTimestamp) {
+        function check(msg: MsgTimestamp64) {
+            assert(msg instanceof MsgTimestamp64);
+
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 8);
             assert.strictEqual(msg.msgpackLength, 10);
@@ -67,14 +70,15 @@ describe(TITLE, function () {
     it("MsgTimestamp96", () => {
         const time = -1;
         const nano = 999999999;
-        const msg = MsgTimestamp.from(time, nano);
-        assert(msg instanceof MsgTimestamp96);
+        const msg = createMsgTimestamp(time, nano) as MsgTimestamp96;
         check(msg);
 
         // round trip
-        check(new MsgTimestamp(msg.buffer));
+        check(unpackMsgTimestamp(msg.buffer) as MsgTimestamp96);
 
-        function check(msg: MsgTimestamp) {
+        function check(msg: MsgTimestamp96) {
+            assert(msg instanceof MsgTimestamp96);
+
             assert.strictEqual(msg.type, -1);
             assert.strictEqual(msg.buffer.length, 12);
             assert.strictEqual(msg.msgpackLength, 15);
