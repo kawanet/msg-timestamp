@@ -1,14 +1,74 @@
-# UNDER DEVELOPMENT - msgpack timestamp: ext type -1
+# msg-timestamp - msgpack timestamp: ext type -1
 
 [![Build Status](https://travis-ci.org/kawanet/msg-timestamp.svg?branch=master)](https://travis-ci.org/kawanet/msg-timestamp)
 
-### Synopsis
+### `MsgTimestamp32`
 
-TBD
+```js
+var MsgTimestamp32 = require("msg-timestamp").MsgTimestamp32;
+
+var msg = MsgTimestamp32.from(0);
+
+msg + ""; // => '1970-01-01T00:00:00.000000000Z'
+
+msg.getTime(); // => 0
+
+msg.getNano(); // => 0
+
+msg.msgpackLength; // => 6
+
+var msgToBuffer = require("msg-interface").msgToBuffer;
+msgToBuffer(msg); // => <Buffer d6 ff 00 00 00 00>
+```
+
+### `MsgTimestamp64`
+
+```js
+var MsgTimestamp64 = require("msg-timestamp").MsgTimestamp64;
+
+var msg = MsgTimestamp64.from(1539886821, 123456789);
+
+msg + ""; // => '2018-10-18T18:20:21.123456789Z'
+
+msg.toString("%Y/%m/%d"); // => '2018/10/18'
+
+msg.getTime(); // => 1539886821
+
+msg.getNano(); // => 123456789
+
+msg.msgpackLength; // => 10
+
+var msgToBuffer = require("msg-interface").msgToBuffer;
+msgToBuffer(msg); // => <Buffer d7 ff 1d 6f 34 54 5b c8 ce e5>
+```
+
+### `MsgTimestamp96`
+
+```js
+var MsgTimestamp96 = require("msg-timestamp").MsgTimestamp96;
+
+var msg = MsgTimestamp96.from(-1, 123456789);
+
+msg + ""; // => '1969-12-31T23:59:59.123456789Z'
+
+msg.getTime(); // => -1
+
+msg.getNano(); // => 123456789
+
+msg.msgpackLength; // => 15
+
+var msgToBuffer = require("msg-interface").msgToBuffer;
+msgToBuffer(msg); // => <Buffer c7 0c ff 07 5b cd 15 ff ff ff ff ff ff ff ff>
+```
 
 ### GitHub
 
 - [https://github.com/kawanet/msg-timestamp](https://github.com/kawanet/msg-timestamp)
+
+### See Also
+
+- [https://github.com/kawanet/msg-interface](https://github.com/kawanet/msg-interface)
+- [https://github.com/kawanet/timestamp-nano](https://github.com/kawanet/timestamp-nano)
 
 ### The MIT License (MIT)
 

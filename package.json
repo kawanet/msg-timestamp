@@ -1,16 +1,16 @@
 {
   "name": "msg-timestamp",
   "description": "msgpack timestamp: ext type -1",
-  "version": "0.99.1017",
+  "version": "1.0.0",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/msg-timestamp/issues"
   },
   "dependencies": {
-    "int64-buffer": "github:kawanet/int64-buffer",
-    "msg-ext": "github:kawanet/msg-ext",
-    "msg-interface": "github:kawanet/msg-interface",
-    "timestamp-nano": "github:kawanet/timestamp-nano"
+    "int64-buffer": "^0.99.1007",
+    "msg-ext": "^1.0.0",
+    "msg-interface": "^1.0.0",
+    "timestamp-nano": "^1.0.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
